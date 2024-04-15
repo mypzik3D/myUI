@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "easy_sfml.hpp"
@@ -93,19 +94,19 @@ void rectangle_draw(sf::RenderWindow& window, object& obj){
 	window.draw(shape);
 }
 
-object& new_object(std::vector<object>& massive,std::string name, float pos_x, float pos_y, float size_x, float size_y, object* obj_stick = null,int st_x=2,int st_y=0, sf::Color color=sf::Color::White){
-	object obj;
-	obj.name = name;
-	obj.position.x = pos_x;
-	obj.position.y = pos_y;
-	obj.size.x = size_x;
-	obj.size.y = size_y;
-	obj.color = color;
-	obj.stick_pos.x = st_x;
-	obj.stick_pos.y = st_y;
-	obj.stick_object = obj_stick;
-	massive.push_back(obj);
-	return massive.back();
+object* new_object(std::vector<std::unique_ptr<object>>& massive,std::string name, float pos_x, float pos_y, float size_x, float size_y, object* obj_stick = null,int st_x=2,int st_y=0, sf::Color color=sf::Color::White){
+	auto obj = std::make_unique<object>();
+	obj->name = name;
+	obj->position.x = pos_x;
+	obj->position.y = pos_y;
+	obj->size.x = size_x;
+	obj->size.y = size_y;
+	obj->color = color;
+	obj->stick_pos.x = st_x;
+	obj->stick_pos.y = st_y;
+	obj->stick_object = obj_stick;
+	massive.push_back(std::move(obj));
+	return massive.back().get();
 }
 
 
