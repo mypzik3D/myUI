@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "draw.hpp"
 #include "data.hpp"
-#include "easy_sfml.hpp"
 #include <iostream>
 
 
@@ -11,15 +10,24 @@ std::vector<std::unique_ptr<object>> objects;
 int main(){
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 
-	object* canvas = new_object(objects,"canvas" , 0, 0, 0, 0, null, 10, 10,sf::Color::Black);
+	object* canvas = new_object(objects,"canvas" , 0, 0, 0, 0, null, 10, 10,sf::Color::White);
 	canvas->size = sf::Vector2f(200,200);
 
-	canvas->scale_pos.x = 0;
-	canvas->scale_pos.y = 0;
-
 	old_size(window);
-	object* obj = new_object(objects,"in" , 20, 20, 10, 10, canvas, 0, 10, sf::Color::Magenta);
+
+	object* obj = new_object(objects,"in" , 0, 0, 90, 90, canvas, 0, 0, sf::Color(222,255,111,200));
 	obj->scale_pos = sf::Vector2i(0, 0);
+	object* obj1 = new_object(objects,"in" , 0, 0, 40, 40, obj, -1, -1, sf::Color(222,0,111,200));
+	obj1->scale_pos = sf::Vector2i(-1, 2);
+	object* obj2 = new_object(objects,"in" , 0, 0, 40, 40, obj, 1, 1, sf::Color(222,0,111,200));
+	obj2->scale_pos = sf::Vector2i(1, 2);
+	object* obj3 = new_object(objects,"in" , 0, 0, 40, 40, obj, -1, 1, sf::Color(222,0,111,200));
+	obj3->scale_pos = sf::Vector2i(4, 1);
+	object* obj4 = new_object(objects,"in" , 0, 0, 40, 40, obj, 1, -1, sf::Color(222,0,111,200));
+	obj4->scale_pos = sf::Vector2i(4, 1);
+
+
+
 
 
     while (window.isOpen()){

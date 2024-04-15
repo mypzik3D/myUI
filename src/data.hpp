@@ -2,7 +2,6 @@
 #include <memory>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "easy_sfml.hpp"
 
 sf::Vector2u old_size_window;
 
@@ -49,10 +48,10 @@ void rectangle_draw(sf::RenderWindow& window, object& obj){
     float spY=obj.size.y;
 
     if(obj.scale_pos.x == 1 || obj.scale_pos.x == -1){
-		spX = obj.size.x+((float)old_size_window.x-(float)window.getSize().x)/2;
+		spX = obj.size.x+(float)window.getSize().x/2-(float)old_size_window.x/2;
 	}
     if(obj.scale_pos.y == 1 || obj.scale_pos.y == -1){
-		spY = obj.size.y+((float)old_size_window.y-(float)window.getSize().y)/2;
+		spY = obj.size.y+(float)window.getSize().y/2-(float)old_size_window.y/2;
 	}
     if(obj.scale_pos.x == 0){
 		spX = obj.size.x+(float)window.getSize().x-(float)old_size_window.x;
@@ -66,23 +65,23 @@ void rectangle_draw(sf::RenderWindow& window, object& obj){
 		
     if(obj.stick_object != null){
 		if(obj.stick_pos.x == 0){
-			psX = ((float)obj.stick_object->size.x)/2-obj.real_size.x/2+obj.position.x+(float)obj.stick_object->position.x;
+			psX = ((float)obj.stick_object->real_size.x)/2-obj.real_size.x/2+obj.position.x+(float)obj.stick_object->real_pos.x;
 		}
 		if(obj.stick_pos.x == 1){
-			psX = ((float)obj.stick_object->size.x)-obj.real_size.x-obj.position.x+(float)obj.stick_object->position.x;
+			psX = ((float)obj.stick_object->real_size.x)-obj.real_size.x-obj.position.x+(float)obj.stick_object->real_pos.x;
 		}
 		if(obj.stick_pos.x == -1){
-			psX = (float)obj.position.x+obj.stick_object->position.x;
+			psX = (float)obj.position.x+obj.stick_object->real_pos.x;
 		}
 
 		if(obj.stick_pos.y == 0){
-			psY = ((float)obj.stick_object->size.y)/2-obj.real_size.y/2+obj.position.y+(float)obj.stick_object->position.y;
+			psY = ((float)obj.stick_object->real_size.y)/2-obj.real_size.y/2+obj.position.y+(float)obj.stick_object->real_pos.y;
 		}
 		if(obj.stick_pos.y == 1){
-			psY = ((float)obj.stick_object->size.y)-obj.real_size.y-obj.position.y+(float)obj.stick_object->position.y;
+			psY = ((float)obj.stick_object->real_size.y)-obj.real_size.y-obj.position.y+(float)obj.stick_object->real_pos.y;
 		}
 		if(obj.stick_pos.y == -1){
-			psY = (float)obj.position.y+obj.stick_object->position.y;
+			psY = (float)obj.position.y+obj.stick_object->real_pos.y;
 		}
 	}
 	obj.real_pos.x = psX;
