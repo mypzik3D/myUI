@@ -3,11 +3,11 @@
 #include "data.hpp"
 
 
-void update_window(sf::RenderWindow& window,std::vector<object>& objects){
+void update_window(sf::RenderWindow& window,std::vector<std::unique_ptr<object>>& objects){
 	window.clear();
-	for(int i = 0; i < objects.size(); i++){
-		object obj = objects.at(i);
-		obj.draw(window);
+	for(const auto & i : objects){
+		object* obj = i.get();
+		obj->draw(window);
 	}
 	window.display();
 }
