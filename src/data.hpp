@@ -122,52 +122,18 @@ void RoundedRectangle(object& obj,sf::RenderWindow& window)
 {
     int POINTS = obj.radius;
 
-    float psX=obj.position.x;
-	float psY=obj.position.y;
-    float spX=obj.size.x;
-    float spY=obj.size.y;
+	sf::Vector2f size = set_size(obj, window);
+    obj.real_size = size;
 
-    if(obj.scale_pos.x == 1 || obj.scale_pos.x == -1){
-		spX = obj.size.x+(float)window.getSize().x/2-(float)old_size_window.x/2;
-	}
-    if(obj.scale_pos.y == 1 || obj.scale_pos.y == -1){
-		spY = obj.size.y+(float)window.getSize().y/2-(float)old_size_window.y/2;
-	}
-    if(obj.scale_pos.x == 0){
-		spX = obj.size.x+(float)window.getSize().x-(float)old_size_window.x;
-	}
-    if(obj.scale_pos.y == 0){
-	    spY = obj.size.y+(float)window.getSize().y-(float)old_size_window.y;		
-	}
-		
-    obj.real_size.x = spX;
-	obj.real_size.y = spY;
-		
-    if(obj.stick_object != null){
-		if(obj.stick_pos.x == 0){
-			psX = ((float)obj.stick_object->real_size.x)/2-obj.real_size.x/2+obj.position.x+(float)obj.stick_object->real_pos.x;
-		}
-		if(obj.stick_pos.x == 1){
-			psX = ((float)obj.stick_object->real_size.x)-obj.real_size.x-obj.position.x+(float)obj.stick_object->real_pos.x;
-		}
-		if(obj.stick_pos.x == -1){
-			psX = (float)obj.position.x+obj.stick_object->real_pos.x;
-		}
+    sf::Vector2f pos = set_pos(obj);
+	obj.real_pos = pos;
+    
+    float psX=pos.x;
+	float psY=pos.y;
+    float spX=size.x;
+    float spY=size.y;
 
-		if(obj.stick_pos.y == 0){
-			psY = ((float)obj.stick_object->real_size.y)/2-obj.real_size.y/2+obj.position.y+(float)obj.stick_object->real_pos.y;
-		}
-		if(obj.stick_pos.y == 1){
-			psY = ((float)obj.stick_object->real_size.y)-obj.real_size.y-obj.position.y+(float)obj.stick_object->real_pos.y;
-		}
-		if(obj.stick_pos.y == -1){
-			psY = (float)obj.position.y+obj.stick_object->real_pos.y;
-		}
-	}
-	obj.real_pos.x = psX;
-	obj.real_pos.y = psY;
-
-    /* https://en.sfml-dev.org/forums/index.php?topic=973.0 */
+	/* https://en.sfml-dev.org/forums/index.php?topic=973.0 */
 	sf::ConvexShape rrect;
 	rrect.setPointCount(POINTS*4);
 	rrect.setOutlineThickness(obj.outline);
@@ -211,9 +177,10 @@ void RoundedRectangle(object& obj,sf::RenderWindow& window)
 
 void text_draw(sf::RenderWindow& window, object& obj){
     sf::Text shape(obj.text, betterVCR);
-    float psX=obj.position.x;
-	float psY=obj.position.y;
 
+    sf::Vector2f pos = set_pos(obj);
+	obj.real_pos = pos;
+    
 	shape.setCharacterSize(obj.size.x);
 	shape.setFillColor(obj.color);
 	//shape.setOutlineColor(obj.outline_col);
@@ -224,30 +191,8 @@ void text_draw(sf::RenderWindow& window, object& obj){
 
     obj.real_size = textSize;
 		
-    if(obj.stick_object != null){
-		if(obj.stick_pos.x == 0){
-			psX = ((float)obj.stick_object->real_size.x)/2-obj.real_size.x/2+obj.position.x+(float)obj.stick_object->real_pos.x;
-		}
-		if(obj.stick_pos.x == 1){
-			psX = ((float)obj.stick_object->real_size.x)-obj.real_size.x-obj.position.x+(float)obj.stick_object->real_pos.x;
-		}
-		if(obj.stick_pos.x == -1){
-			psX = (float)obj.position.x+obj.stick_object->real_pos.x;
-		}
-
-		if(obj.stick_pos.y == 0){
-			psY = ((float)obj.stick_object->real_size.y)/2-obj.real_size.y/2+obj.position.y+(float)obj.stick_object->real_pos.y;
-		}
-		if(obj.stick_pos.y == 1){
-			psY = ((float)obj.stick_object->real_size.y)-obj.real_size.y-obj.position.y+(float)obj.stick_object->real_pos.y;
-		}
-		if(obj.stick_pos.y == -1){
-			psY = (float)obj.position.y+obj.stick_object->real_pos.y;
-		}
-	}
-	obj.real_pos.x = psX;
-	obj.real_pos.y = psY;	
-    shape.setPosition(psX, psY);
+	obj.real_pos = pos;
+    shape.setPosition(pos);
 	window.draw(shape);
 }
 
