@@ -15,15 +15,30 @@ int main(){
 
 	object* canvas = new_object(objects,"canvas" , 0, 0, 0, 0, null, 10, 10,sf::Color::Black);
 	canvas->size = sf::Vector2f(200,200);
+	canvas->scale_pos = sf::Vector2i(1,1);
 
-	object* obj = new_object(objects,"center",0,0,120,50,canvas,-1,-1,sf::Color(120,100,200,100));
-    obj->type = "round";
-    obj->radius = 20;
+    object* cent1 = new_object(objects, "b", 10,0,180,180,canvas,-1,0, background);
+	cent1->scale_pos = sf::Vector2i(2,2);
+    object* cent2 = new_object(objects, "b", 5,0,160,170,cent1,-1,0, foreground);
+	cent2->scale_pos = sf::Vector2i(2,2);
+    object* cent3 = new_object(objects, "b", 5,0,140,160,cent2,-1,0,button);
+	cent3->scale_pos = sf::Vector2i(2,2);
+	object* cent4 = new_object(objects, "b", 5,0,120,150,cent3,-1,0,text);
+	cent4->scale_pos = sf::Vector2i(2,2);
+	object* cent5 = new_object(objects, "b", 5, 5, 100, 65,cent4,-1,-1,red);
+	cent5->scale_pos = sf::Vector2i(4,4);
+    object* cent6 = new_object(objects, "b", 5, 5, 100, 65,cent4,-1,1,green);
+	cent6->scale_pos = sf::Vector2i(4,4);
 
-	object* text = new_object(objects,"texte",0,0,30,0,obj,0,0,sf::Color::White);
-    text->type = "text";
-	text->text = "UwU";
-	 
+	object* txt1 = new_object(objects, "b", 0, 0, 20, 0,cent5,0,0,text);
+	txt1->text = "Yes";
+	txt1->type = "text";
+    object* txt2 = new_object(objects, "b", 0, 0, 20, 0,cent6,0,0,text);
+	txt2->text = "No";
+	txt2->type = "text";
+
+    
+	window.setFramerateLimit(75);
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event)){
