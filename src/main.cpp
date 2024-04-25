@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "data-files.hpp"
 #include "draw.hpp"
 #include "data.hpp"
 #include <iostream>
@@ -8,28 +9,21 @@
 std::vector<std::unique_ptr<object>> objects;
 
 int main(){
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 5;
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!", sf::Style::Default, settings); 	old_size(window); get_files();
 
-	object* canvas = new_object(objects,"canvas" , 0, 0, 0, 0, null, 10, 10,sf::Color::White);
+	object* canvas = new_object(objects,"canvas" , 0, 0, 0, 0, null, 10, 10,sf::Color::Black);
 	canvas->size = sf::Vector2f(200,200);
 
-	old_size(window);
+	object* obj = new_object(objects,"center",0,0,120,50,canvas,-1,-1,sf::Color(120,100,200,100));
+    obj->type = "round";
+    obj->radius = 20;
 
-	object* obj = new_object(objects,"in" , 0, 0, 90, 90, canvas, 0, 0, sf::Color(222,255,111,200));
-	obj->scale_pos = sf::Vector2i(0, 0);
-	object* obj1 = new_object(objects,"in" , 0, 0, 40, 40, obj, -1, -1, sf::Color(222,0,111,200));
-	obj1->scale_pos = sf::Vector2i(-1, 2);
-	object* obj2 = new_object(objects,"in" , 0, 0, 40, 40, obj, 1, 1, sf::Color(222,0,111,200));
-	obj2->scale_pos = sf::Vector2i(1, 2);
-	object* obj3 = new_object(objects,"in" , 0, 0, 40, 40, obj, -1, 1, sf::Color(222,0,111,200));
-	obj3->scale_pos = sf::Vector2i(4, 1);
-	object* obj4 = new_object(objects,"in" , 0, 0, 40, 40, obj, 1, -1, sf::Color(222,0,111,200));
-	obj4->scale_pos = sf::Vector2i(4, 1);
-
-
-
-
-
+	object* text = new_object(objects,"texte",0,0,30,0,obj,0,0,sf::Color::White);
+    text->type = "text";
+	text->text = "UwU";
+	 
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event)){
@@ -40,9 +34,7 @@ int main(){
 				window.setView(sf::View(visible));
 			}
 		}
-		std::cout << "size_x: " << canvas->size.x << "; size_y: " << canvas->size.y << std::endl;
-		std::cout << "real_size_x: " << canvas->real_size.x << "; real_size_y: " << canvas->real_size.y << std::endl;
-		update_window(window,objects);	
+		update_window(window,objects);
     }
 
     return 0;
