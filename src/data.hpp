@@ -35,7 +35,7 @@ public:
 	sf::Vector2i scale_pos  = sf::Vector2i(0,0);
 	float rotate_angle = 0;
 	int layer;
-    float radius, outline;
+    float radius=10, outline;
 	object* stick_object;
 
 	void draw(sf::RenderWindow& window){

@@ -17,19 +17,20 @@ int main(){
 	canvas->size = sf::Vector2f(200,200);
 	canvas->scale_pos = sf::Vector2i(1,1);
 
-    object* cent1 = new_object(objects, "b", 10,0,180,180,canvas,-1,0,sf::Color::White);
-	cent1->scale_pos = sf::Vector2i(1,1);
-    object* cent2 = new_object(objects, "b", 5,0,160,170,cent1,-1,0,sf::Color::Red);
-	cent2->scale_pos = sf::Vector2i(2,1);
-    object* cent3 = new_object(objects, "b", 5,0,140,160,cent2,-1,0,sf::Color::Green);
-	cent3->scale_pos = sf::Vector2i(1,2);
-	object* cent4 = new_object(objects, "b", 5,0,120,150,cent3,-1,0,sf::Color::Blue);
-	cent4->scale_pos = sf::Vector2i(2,1);
-	object* cent5 = new_object(objects, "b", 5,0,100,140,cent4,-1,0,sf::Color::Cyan);
-	cent5->scale_pos = sf::Vector2i(1,2);
-    object* cent6 = new_object(objects, "b", 5,0,80,130,cent5,-1,0,sf::Color::Green);
-	cent6->scale_pos = sf::Vector2i(2,1);
-
+    object* cent1 = new_object(objects, "b", 10,0,180,180,canvas,-1,0, background);
+	cent1->scale_pos = sf::Vector2i(2,2);
+    object* cent2 = new_object(objects, "b", 5,0,160,170,cent1,-1,0, foreground);
+	cent2->scale_pos = sf::Vector2i(2,2);
+    object* cent3 = new_object(objects, "b", 5,0,140,160,cent2,-1,0,button);
+	cent3->scale_pos = sf::Vector2i(2,2);
+	object* cent4 = new_object(objects, "b", 5,0,120,150,cent3,-1,0,text);
+	cent4->scale_pos = sf::Vector2i(2,2);
+	object* cent5 = new_object(objects, "b", 5, 5, 100, 55,cent4,-1,-1,red);
+	cent5->scale_pos = sf::Vector2i(4,4);
+    object* cent6 = new_object(objects, "b", 5, 5, 100, 65,cent4,-1,1,green);
+	cent6->scale_pos = sf::Vector2i(4,4);
+    
+	window.setFramerateLimit(75);
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event)){
