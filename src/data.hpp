@@ -26,7 +26,7 @@ public:
 	sf::Vector2f position;
 	sf::Vector2f size;
 	sf::Vector2f real_size=sf::Vector2f(0, 0), real_pos=sf::Vector2f(0, 0);
-	sf::Vector2f min_size;
+	sf::Vector2f min_size, max_size;
 	std::string type = "sprite";
 	sf::String text;
     bool isActive, isInput, statusInput, isWisible;
@@ -51,30 +51,9 @@ public:
 	
 object* null;
 
-void rectangle_draw(sf::RenderWindow& window, object& obj){
-	sf::RectangleShape shape;
-
+sf::Vector2f set_pos(object obj){
     float psX=obj.position.x;
 	float psY=obj.position.y;
-    float spX=obj.size.x;
-    float spY=obj.size.y;
-
-    if(obj.scale_pos.x == 1 || obj.scale_pos.x == -1){
-		spX = obj.size.x+(float)window.getSize().x/2-(float)old_size_window.x/2;
-	}
-    if(obj.scale_pos.y == 1 || obj.scale_pos.y == -1){
-		spY = obj.size.y+(float)window.getSize().y/2-(float)old_size_window.y/2;
-	}
-    if(obj.scale_pos.x == 0){
-		spX = obj.size.x+(float)window.getSize().x-(float)old_size_window.x;
-	}
-    if(obj.scale_pos.y == 0){
-	    spY = obj.size.y+(float)window.getSize().y-(float)old_size_window.y;		
-	}
-		
-    obj.real_size.x = spX;
-	obj.real_size.y = spY;
-		
     if(obj.stick_object != null){
 		if(obj.stick_pos.x == 0){
 			psX = ((float)obj.stick_object->real_size.x)/2-obj.real_size.x/2+obj.position.x+(float)obj.stick_object->real_pos.x;
@@ -96,13 +75,44 @@ void rectangle_draw(sf::RenderWindow& window, object& obj){
 			psY = (float)obj.position.y+obj.stick_object->real_pos.y;
 		}
 	}
-	obj.real_pos.x = psX;
-	obj.real_pos.y = psY;
+    return sf::Vector2f(psX,psY);
+}
+
+sf::Vector2f set_size(object obj, sf::RenderWindow& window){
+    float spX=obj.size.x;
+    float spY=obj.size.y;
+    
+	if(obj.stick_object != null){
+		if(obj.scale_pos.x > 0){
+			spX = obj.size.x+obj.stick_object->real_size.x/(float)obj.scale_pos.x-obj.stick_object->size.x/(float)obj.scale_pos.x;
+		}
+		if(obj.scale_pos.y > 0){
+			spY = obj.size.y+obj.stick_object->real_size.y/(float)obj.scale_pos.y-obj.stick_object->size.y/(float)obj.scale_pos.y;
+		}	
+    }else{
+		if(obj.scale_pos.x > 0){
+			spX = obj.size.x+(float)window.getSize().x/obj.scale_pos.x-(float)old_size_window.x/obj.scale_pos.x;
+		}
+		if(obj.scale_pos.y > 0){
+			spY = obj.size.y+(float)window.getSize().y/obj.scale_pos.y-(float)old_size_window.y/obj.scale_pos.y;
+		}
+    }
+	return sf::Vector2f(spX, spY);
+}
+
+void rectangle_draw(sf::RenderWindow& window, object& obj){
+	sf::RectangleShape shape;
+    
+	sf::Vector2f size = set_size(obj, window);
+    obj.real_size = size;
+
+    sf::Vector2f pos = set_pos(obj);
+	obj.real_pos = pos;
 
 	shape.setOutlineThickness(obj.outline);
 	shape.setOutlineColor(obj.outline_col);
-	shape.setSize(sf::Vector2f(spX, spY));
-	shape.setPosition(sf::Vector2f(psX,psY));
+	shape.setSize(size);
+	shape.setPosition(pos);
 	shape.setFillColor(obj.color);
 	window.draw(shape);
 }
