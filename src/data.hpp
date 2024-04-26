@@ -105,11 +105,17 @@ sf::Vector2f set_size(object obj, sf::RenderWindow& window){
 
 void calc_layer(std::vector<std::unique_ptr<object>>& massive){
     for(int i = 0; i < massive.size(); i++){
-		int a = 0;
+		object* obj = massive.at(i).get();
+    	int a = 0;
 		while(true){
-		
-		    break;
+		    if(obj->stick_object == null){
+			     break;   
+			}else{
+				obj = obj->stick_object;
+				a++;
+			}
 		}
+		massive.at(i)->layer = a;
 	}
 }
 
@@ -233,5 +239,6 @@ object* new_object(std::vector<std::unique_ptr<object>>& massive,std::string typ
 	obj->stick_pos.y = st_y;
 	obj->stick_object = obj_stick;
 	massive.push_back(std::move(obj));
+	calc_layer(massive);
 	return massive.back().get();
 }

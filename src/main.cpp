@@ -17,10 +17,14 @@ int main(){
 	canvas->size = sf::Vector2f(200,200);
 	canvas->scale_pos = sf::Vector2i(1,1);
 
+
     object* cent1 = new_object(objects, spr, 10,10,180,180,canvas,-1,-1, background);
 	cent1->scale_pos = sf::Vector2i(1,1);
 	cent1->radius = 10;
 
+    object* cent2 = new_object(objects, spr, 0,0,160,160,cent1,0,0, foreground);
+	cent2->scale_pos = sf::Vector2i(1,1);
+	cent2->radius = 8;
 
 
 	window.setFramerateLimit(75);
