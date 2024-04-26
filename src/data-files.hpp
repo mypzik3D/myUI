@@ -1,6 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#define rds "round"
+#define spr "sprite"
+#define txt "text"
+
 sf::Color background = sf::Color(57, 59, 68, 255);
 sf::Color foreground = sf::Color(82, 87, 93, 255);
 sf::Color button = sf::Color(0, 173, 181, 255);
