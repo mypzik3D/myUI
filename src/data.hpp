@@ -28,7 +28,10 @@ public:
 	sf::Vector2f real_size=sf::Vector2f(0, 0), real_pos=sf::Vector2f(0, 0);
 	sf::Vector2f min_size, max_size;
 	std::string type = "sprite";
+
+	sf::Font* font = &betterVCR;
 	sf::String text;
+
     bool isActive, isInput, statusInput, isWisible;
 	sf::Vector2i stick_pos  = sf::Vector2i(0,0);
 	sf::Vector2i origin_pos = sf::Vector2i(-1,-1);
@@ -176,7 +179,9 @@ void RoundedRectangle(object& obj,sf::RenderWindow& window)
 }
 
 void text_draw(sf::RenderWindow& window, object& obj){
-    sf::Text shape(obj.text, betterVCR);
+    sf::Text shape;
+    shape.setFont(*obj.font);
+	shape.setString(obj.text);
 
     sf::Vector2f pos = set_pos(obj);
 	obj.real_pos = pos;
@@ -196,9 +201,9 @@ void text_draw(sf::RenderWindow& window, object& obj){
 	window.draw(shape);
 }
 
-object* new_object(std::vector<std::unique_ptr<object>>& massive,std::string name, float pos_x, float pos_y, float size_x, float size_y, object* obj_stick = null,int st_x=2,int st_y=0, sf::Color color=sf::Color::White){
+object* new_object(std::vector<std::unique_ptr<object>>& massive,std::string type, float pos_x, float pos_y, float size_x, float size_y, object* obj_stick = null,int st_x=2,int st_y=0, sf::Color color=sf::Color::White){
 	auto obj = std::make_unique<object>();
-	obj->name = name;
+	obj->type = type;
 	obj->position.x = pos_x;
 	obj->position.y = pos_y;
 	obj->size.x = size_x;
