@@ -32,20 +32,18 @@ public:
 	sf::Font* font = &betterVCR;
 	sf::String text;
 
-    bool isActive, isInput, statusInput, isWisible;
+    bool isActive=true, isInput, statusInput, isWisible=true;
 	sf::Vector2i stick_pos  = sf::Vector2i(0,0);
 	sf::Vector2i origin_pos = sf::Vector2i(-1,-1);
 	sf::Vector2i scale_pos  = sf::Vector2i(0,0);
 	float rotate_angle = 0;
 	int layer;
-    float radius=10, outline;
+    float radius, outline;
 	object* stick_object;
 
 	void draw(sf::RenderWindow& window){
 		if(type == "sprite")
 			rectangle_draw(window, *this);
-		if(type == "round")
-			RoundedRectangle(*this, window);
 		if(type == "text")
 		    text_draw(window, *this);
 
@@ -53,6 +51,8 @@ public:
 };
 	
 object* null;
+
+//-----------------------------------------------------------------------
 
 sf::Vector2f set_pos(object obj){
     float psX=obj.position.x;
@@ -83,7 +83,7 @@ sf::Vector2f set_pos(object obj){
 
 sf::Vector2f set_size(object obj, sf::RenderWindow& window){
     float spX=obj.size.x;
-    float spY=obj.size.y;
+	float spY=obj.size.y;
     
 	if(obj.stick_object != null){
 		if(obj.scale_pos.x > 0){
@@ -103,26 +103,46 @@ sf::Vector2f set_size(object obj, sf::RenderWindow& window){
 	return sf::Vector2f(spX, spY);
 }
 
+void calc_layer(std::vector<std::unique_ptr<object>>& massive){
+    for(int i = 0; i < massive.size(); i++){
+		int a = 0;
+		while(true){
+		
+		    break;
+		}
+	}
+}
+
+bool get_input;
+
+//------------------------------------------------------------------------
+
 void rectangle_draw(sf::RenderWindow& window, object& obj){
-	sf::RectangleShape shape;
-    
-	sf::Vector2f size = set_size(obj, window);
-    obj.real_size = size;
+    if(obj.isActive)	
+	if(obj.radius == 0){    
+		sf::Vector2f size = set_size(obj, window);
+		obj.real_size = size;
 
-    sf::Vector2f pos = set_pos(obj);
-	obj.real_pos = pos;
-
-	shape.setOutlineThickness(obj.outline);
-	shape.setOutlineColor(obj.outline_col);
-	shape.setSize(size);
-	shape.setPosition(pos);
-	shape.setFillColor(obj.color);
-	window.draw(shape);
+		sf::Vector2f pos = set_pos(obj);
+		obj.real_pos = pos;
+		
+		if(obj.isWisible){
+			sf::RectangleShape shape;
+			shape.setOutlineThickness(obj.outline);
+			shape.setOutlineColor(obj.outline_col);
+			shape.setSize(size);
+			shape.setPosition(pos);
+			shape.setFillColor(obj.color);
+			window.draw(shape);
+		}
+	}
+	else{
+		RoundedRectangle(obj, window);
+	}
 }
 
 
-void RoundedRectangle(object& obj,sf::RenderWindow& window)
-{
+void RoundedRectangle(object& obj,sf::RenderWindow& window){
     int POINTS = obj.radius;
 
 	sf::Vector2f size = set_size(obj, window);
@@ -137,68 +157,68 @@ void RoundedRectangle(object& obj,sf::RenderWindow& window)
     float spY=size.y;
 
 	/* https://en.sfml-dev.org/forums/index.php?topic=973.0 */
-	sf::ConvexShape rrect;
-	rrect.setPointCount(POINTS*4);
-	rrect.setOutlineThickness(obj.outline);
-	rrect.setOutlineColor(obj.outline_col);
-	rrect.setFillColor(obj.color);
-	float X=0,Y=0;
-	int a = 0;
-	for(int i=0; i<POINTS; i++)
-	{
-		X+=obj.radius/POINTS;
-		Y=sqrt(obj.radius*obj.radius-X*X);
-		rrect.setPoint(a, sf::Vector2f(X+psX+spX-obj.radius,psY-Y+obj.radius));
-		a++;
+    if(obj.isWisible){
+		sf::ConvexShape rrect;
+		rrect.setPointCount(POINTS*4);
+		rrect.setOutlineThickness(obj.outline);
+		rrect.setOutlineColor(obj.outline_col);
+		rrect.setFillColor(obj.color);
+		float X=0,Y=0;
+		int a = 0;
+		for(int i=0; i<POINTS; i++){
+			X+=obj.radius/POINTS;
+			Y=sqrt(obj.radius*obj.radius-X*X);
+			rrect.setPoint(a, sf::Vector2f(X+psX+spX-obj.radius,psY-Y+obj.radius));
+			a++;
+		}
+		Y=0;
+		for(int i=0; i<POINTS; i++){
+			Y+=obj.radius/POINTS;
+			X=sqrt(obj.radius*obj.radius-Y*Y);
+			rrect.setPoint(a, sf::Vector2f(psX+spX+X-obj.radius,psY+spY-obj.radius+Y));
+			a++;
+		}
+		X=0;
+		for(int i=0; i<POINTS; i++){
+			X+=obj.radius/POINTS;
+			Y=sqrt(obj.radius*obj.radius-X*X);
+			rrect.setPoint(a, sf::Vector2f(psX+obj.radius-X,psY+spY-obj.radius+Y));
+			a++;
+		}
+		Y=0;
+		for(int i=0; i<POINTS; i++){
+			Y+=obj.radius/POINTS;
+			X=sqrt(obj.radius*obj.radius-Y*Y);
+			rrect.setPoint(a, sf::Vector2f(psX-X+obj.radius,psY+obj.radius-Y));
+			a++;
+		}
+		window.draw(rrect);
 	}
-	Y=0;
-	for(int i=0; i<POINTS; i++)
-	{
-		Y+=obj.radius/POINTS;
-		X=sqrt(obj.radius*obj.radius-Y*Y);
-		rrect.setPoint(a, sf::Vector2f(psX+spX+X-obj.radius,psY+spY-obj.radius+Y));
-		a++;
-	}
-	X=0;
-	for(int i=0; i<POINTS; i++)
-	{
-		X+=obj.radius/POINTS;
-		Y=sqrt(obj.radius*obj.radius-X*X);
-		rrect.setPoint(a, sf::Vector2f(psX+obj.radius-X,psY+spY-obj.radius+Y));
-		a++;
-	}
-	Y=0;
-	for(int i=0; i<POINTS; i++)
-	{
-		Y+=obj.radius/POINTS;
-		X=sqrt(obj.radius*obj.radius-Y*Y);
-		rrect.setPoint(a, sf::Vector2f(psX-X+obj.radius,psY+obj.radius-Y));
-		a++;
-	}
-	window.draw(rrect);
 }
 
 void text_draw(sf::RenderWindow& window, object& obj){
-    sf::Text shape;
-    shape.setFont(*obj.font);
-	shape.setString(obj.text);
+    if(obj.isActive){	
+		sf::Text shape;
+		shape.setFont(*obj.font);
+		shape.setString(obj.text);
 
-    sf::Vector2f pos = set_pos(obj);
-	obj.real_pos = pos;
-    
-	shape.setCharacterSize(obj.size.x);
-	shape.setFillColor(obj.color);
-	//shape.setOutlineColor(obj.outline_col);
-	//shape.setOutlineThickness(obj.outline);
+		sf::Vector2f pos = set_pos(obj);
+		obj.real_pos = pos;
+	
+		sf::FloatRect textRect = shape.getLocalBounds();
+		sf::Vector2f textSize(textRect.width, textRect.height);
 
-	sf::FloatRect textRect = shape.getLocalBounds(); // получение границ текста
-	sf::Vector2f textSize(textRect.width, textRect.height); // размеры текста
-
-    obj.real_size = textSize;
-		
-	obj.real_pos = pos;
-    shape.setPosition(pos);
-	window.draw(shape);
+		obj.real_size = textSize;	
+		obj.real_pos = pos;
+		if(obj.isWisible){
+			shape.setCharacterSize(obj.size.x);
+			shape.setFillColor(obj.color);
+			shape.setOutlineColor(obj.outline_col);
+			shape.setOutlineThickness(obj.outline);
+			shape.setPosition(pos);
+		    window.draw(shape);
+		}
+	}
 }
 
 object* new_object(std::vector<std::unique_ptr<object>>& massive,std::string type, float pos_x, float pos_y, float size_x, float size_y, object* obj_stick = null,int st_x=2,int st_y=0, sf::Color color=sf::Color::White){
@@ -215,5 +235,3 @@ object* new_object(std::vector<std::unique_ptr<object>>& massive,std::string typ
 	massive.push_back(std::move(obj));
 	return massive.back().get();
 }
-
-

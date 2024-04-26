@@ -17,23 +17,10 @@ int main(){
 	canvas->size = sf::Vector2f(200,200);
 	canvas->scale_pos = sf::Vector2i(1,1);
 
-    object* cent1 = new_object(objects, rds, 10,0,180,180,canvas,-1,0, background);
-	cent1->scale_pos = sf::Vector2i(2,2);
-    object* cent2 = new_object(objects, rds, 5,0,160,170,cent1,-1,0, foreground);
-	cent2->scale_pos = sf::Vector2i(2,2);
-    object* cent3 = new_object(objects, rds, 5,0,140,160,cent2,-1,0,button);
-	cent3->scale_pos = sf::Vector2i(2,2);
-	object* cent4 = new_object(objects, rds, 5,0,120,150,cent3,-1,0,text);
-	cent4->scale_pos = sf::Vector2i(2,2);
-	object* cent5 = new_object(objects, rds, 5, 5, 100, 65,cent4,-1,-1,red);
-	cent5->scale_pos = sf::Vector2i(4,4);
-    object* cent6 = new_object(objects, rds, 5, 5, 100, 65,cent4,-1,1,green);
-	cent6->scale_pos = sf::Vector2i(4,4);
-   
-	object* text1 = new_object(objects, txt, 0, 0, 20, 0,cent5,0,0,text);
-	text1->text = "Yes";
-    object* text2 = new_object(objects, txt, 0, 0, 20, 0,cent6,0,0,text);
-	text2->text = "No";
+    object* cent1 = new_object(objects, spr, 10,10,180,180,canvas,-1,-1, background);
+	cent1->scale_pos = sf::Vector2i(1,1);
+	cent1->radius = 10;
+
 
 
 	window.setFramerateLimit(75);

@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define rds "round"
 #define spr "sprite"
 #define txt "text"
 
