@@ -11,8 +11,8 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(myUI src/main.cpp
-		src/data.hpp
-  		src/draw.hpp)
+		src/draw/objects.cpp
+		src/draw/myUI.hpp)
 target_link_libraries(myUI PRIVATE sfml-graphics)
 target_compile_features(myUI PRIVATE cxx_std_17)
 
