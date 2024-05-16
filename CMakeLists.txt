@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(myUI src/main.cpp
 		src/draw/objects.cpp
-		src/draw/myUI.hpp)
+		src/animations/animator.cpp)
 target_link_libraries(myUI PRIVATE sfml-graphics)
 target_compile_features(myUI PRIVATE cxx_std_17)
 

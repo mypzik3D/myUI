@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "draw/myUI.hpp"
+#include "animations/anim.hpp"
 #include <iostream>
 #include "data.h"
 
@@ -22,9 +23,11 @@ int main(){
 	cent1->scale_pos = sf::Vector2i(1,1);
 	cent1->radius = 10;
 
-    object* cent2 = new_object(objects, spr, 0,0,160,160,cent1,0,0, foreground);
+    object* cent2 = new_object(objects, spr, 0,0,50,50,cent1,0,0, foreground);
 	cent2->scale_pos = sf::Vector2i(1,1);
 	cent2->radius = 8;
+	cent2->outline_col = green;
+	add_animation(&cent1->radius, 80, 100);
 
 
 	window.setFramerateLimit(75);
@@ -38,7 +41,9 @@ int main(){
 				window.setView(sf::View(visible));
 			}
 		}
-		//loop
+	  //loop
+	  
+		update_animations();	
 		update_window(window,objects);
     }
 

@@ -17,6 +17,7 @@ object* get_null_object(){
 
 
 object::object(){	
+	min_size = sf::Vector2f(1,1);
 	real_size=sf::Vector2f(0, 0); real_pos=sf::Vector2f(0, 0);
 	type = "sprite";
 
@@ -73,7 +74,16 @@ sf::Vector2f set_size(object obj, sf::RenderWindow& window){
 			spY = obj.size.y+(float)window.getSize().y/obj.scale_pos.y-(float)old_size_window.y/obj.scale_pos.y;
 		}
     }
-	return sf::Vector2f(spX, spY);
+	sf::Vector2f size = sf::Vector2f(spX,spY);
+	if(size.x > obj.max_size.x && obj.max_size.x!=0)
+		size.x = obj.max_size.x;
+	if(size.y > obj.max_size.y && obj.max_size.y!=0)
+		size.y = obj.max_size.y;
+	if(size.x < obj.min_size.x && obj.min_size.x!=0)
+		size.x = obj.min_size.x;
+	if(size.y < obj.min_size.y && obj.min_size.y!=0)
+		size.y = obj.min_size.y;
+	return size;
 }
 
 void calc_layer(std::vector<std::unique_ptr<object>>& massive){
@@ -97,8 +107,8 @@ bool get_input;
 //------------------------------------------------------------------------
 
 void RoundedRectangle(object& obj,sf::RenderWindow& window){
-    int POINTS = obj.radius;
-
+    int POINTS = (int)obj.radius;
+	
 	sf::Vector2f size = set_size(obj, window);
     obj.real_size = size;
 
@@ -120,29 +130,29 @@ void RoundedRectangle(object& obj,sf::RenderWindow& window){
 		float X=0,Y=0;
 		int a = 0;
 		for(int i=0; i<POINTS; i++){
-			X+=obj.radius/POINTS;
-			Y=sqrt(obj.radius*obj.radius-X*X);
+			X+=(int)obj.radius/POINTS;
+			Y=sqrt((int)obj.radius*obj.radius-X*X);
 			rrect.setPoint(a, sf::Vector2f(X+psX+spX-obj.radius,psY-Y+obj.radius));
 			a++;
 		}
 		Y=0;
 		for(int i=0; i<POINTS; i++){
-			Y+=obj.radius/POINTS;
-			X=sqrt(obj.radius*obj.radius-Y*Y);
+			Y+=(int)obj.radius/POINTS;
+			X=sqrt((int)obj.radius*obj.radius-Y*Y);
 			rrect.setPoint(a, sf::Vector2f(psX+spX+X-obj.radius,psY+spY-obj.radius+Y));
 			a++;
 		}
 		X=0;
 		for(int i=0; i<POINTS; i++){
-			X+=obj.radius/POINTS;
-			Y=sqrt(obj.radius*obj.radius-X*X);
+			X+=(int)obj.radius/POINTS;
+			Y=sqrt((int)obj.radius*obj.radius-X*X);
 			rrect.setPoint(a, sf::Vector2f(psX+obj.radius-X,psY+spY-obj.radius+Y));
 			a++;
 		}
 		Y=0;
 		for(int i=0; i<POINTS; i++){
-			Y+=obj.radius/POINTS;
-			X=sqrt(obj.radius*obj.radius-Y*Y);
+			Y+=(int)obj.radius/POINTS;
+			X=sqrt((int)obj.radius*obj.radius-Y*Y);
 			rrect.setPoint(a, sf::Vector2f(psX-X+obj.radius,psY+obj.radius-Y));
 			a++;
 		}
